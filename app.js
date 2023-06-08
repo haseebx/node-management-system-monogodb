@@ -2,8 +2,6 @@ require('dotenv').config();
 
 const express = require('express');
 const expressLayout = require('express-ejs-layouts');
-const methodOverride = require('method-override');
-const { flash } = require('express-flash-message');
 const connectDB = require('./server/config/db');
 
 const app = express();
@@ -18,11 +16,8 @@ app.use(express.json());
 // Static Files
 app.use(express.static('public'));
 
-// Express Session
 
 
-// Flash Messages
-app.use(flash({ sessionKeyName: 'flashMessage' }));
 
 // Templating Engine
 app.use(expressLayout);
