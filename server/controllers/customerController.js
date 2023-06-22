@@ -6,13 +6,15 @@ const mongoose = require("mongoose");
  * Homepage
  */
 exports.homepage = async (req, res) => {
+
+  const messages= await req.consumeFlash("info")
   const locals = {
     title: "NodeJs",
     description: "Free NodeJs User Management System",
   };
 
   res.render("index", {
-    locals,
+    locals, messages
   });
 };
 
@@ -42,6 +44,7 @@ exports.postCustomer = async (req, res) => {
 
   try {
     await Customer.create(newCustomer)
+    await req.flash("info", "New Customer Has been Added")
     res.redirect("/");
 
   } catch (error) {
