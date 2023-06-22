@@ -6,16 +6,26 @@ const mongoose = require("mongoose");
  * Homepage
  */
 exports.homepage = async (req, res) => {
-
-  const messages= await req.consumeFlash("info")
+  const messages = req.flash("info");
   const locals = {
     title: "NodeJs",
     description: "Free NodeJs User Management System",
   };
 
+try {
+  const customers = await Customer.find({}).limit(22);
   res.render("index", {
-    locals, messages
+    locals,
+    messages,
+    customers
   });
+} catch (error) {
+  console.log(error);
+  
+}
+
+
+ 
 };
 
 exports.addCustomer = async (req, res) => {
@@ -30,26 +40,18 @@ exports.addCustomer = async (req, res) => {
 exports.postCustomer = async (req, res) => {
   console.log(req.body);
   const newCustomer = new Customer({
-    firstName:req.body.firstName,
-    lastName:req.body.lastName,
-    details:req.body.details,
-    tel:req.body.tel,
-    email:req.body.email,
-  })
-
-  // const locals = {
-  //   title: "Add New Customer - NodeJs",
-  //   description: "Free NodeJs User Management System",
-  // };
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    details: req.body.details,
+    tel: req.body.tel,
+    email: req.body.email,
+  });
 
   try {
-    await Customer.create(newCustomer)
-    await req.flash("info", "New Customer Has been Added")
+    await Customer.create(newCustomer);
+    req.flash("info", "New Customer Has been Added");
     res.redirect("/");
-
   } catch (error) {
     console.log(error);
-    
   }
-
 };
